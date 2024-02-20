@@ -31,6 +31,7 @@ pipeline {
                     [key: 'tag', value:"\$.ref", defaultValue:''],
                     [key: 'pull_request', value: '\$.action', defaultValue:''],
                     [key: 'pull_request_url', value: '\$.pull_request.url', defaultValue:''],
+                    [key: 'pull_request_head_branch', value: '\$.pull_request.head.ref', defaultValue:''],
                 ],
                 causeString: 'Triggered By Gitlab On $tag',
                 genericRequestVariables: [],
@@ -41,7 +42,7 @@ pipeline {
                 printPostContent: false,
                 silentResponse: false,
                 shouldNotFlattern: false,
-                regexpFilterText: '$object_kind $tag',
+                regexpFilterText: '$object_kind $tag $pull_request $pull_request_head_branch',
                 regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+$)'
         )
     }
