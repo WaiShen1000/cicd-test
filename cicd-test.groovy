@@ -46,35 +46,52 @@ pipeline {
                 regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+)|((opened|synchronize)\\sdev$)'
         )
     }
-    // triggers {
-    //     GenericTrigger(
-    //         genericVariables:[
-    //                 [key: 'project', value:"\$.project.name", defaultValue:''],
-    //                 [key: 'tag', value:"\$.ref", regexpFilter:'^[^\\/]+\\/([^\\/]+)\\/', defaultValue:''],
-    //                 [key: 'checkout_sha', value: '\$.checkout_sha', defaultValue:''],
-    //                 [key: 'commit', value:"\$.commits.message", defaultValue:''],
-    //                 [key: 'object_kind', value: '\$.object_kind', defaultValue:''],
-    //                 [key: 'last_commit', value: '\$.object_attributes.last_commit.id', defaultValue:''],
-    //                 [key: 'target_branch', value: '\$.object_attributes.target_branch', defaultValue:''],
-    //                 [key: 'merge_status', value: '\$.object_attributes.detailed_merge_status', defaultValue:''],
-    //                 [key: 'merge_action', value: '\$.object_attributes.action', defaultValue:''],
-    //             ],
-    //             causeString: 'Triggered By Gitlab On $tag',
-    //             genericRequestVariables: [],
-    //             genericHeaderVariables: [],
-    //             token: "gahsia8xuQuaeceighie9doo",
-    //             tokenCredentialId: '',
-    //             printContributedVariables: false,
-    //             printPostContent: false,
-    //             silentResponse: false,
-    //             shouldNotFlattern: false,
-    //             regexpFilterText: '$object_kind $tag $checkout_sha $last_commit $target_branch $merge_status $merge_action',
-    //             regexpFilterExpression: '(^tag_push\\s\\d+\\.\\d+\\.\\d+-alpha[.-]?\\d*\\s.{40}\\s\\s\\s\\s$)|(^merge_request\\s\\s\\s.{40}\\sdev\\smergeable\\sopen$)'
-    //     )
-    // }
     
     stages {
-        stage('Hello') {
+        // Stage for checkout SCM
+        stage('Checkout') {
+            // Using Git to checkout to specific tag
+            steps {
+                script {
+                    if ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger") {
+                        if("$tag" ==~ /\d+\.\d+\.\d+-alpha[.-]?\d*/) {
+                            echo 'Tag format is validated'
+                        } else {
+                            error "Tag is not in a standard format."                                 
+                        }
+                    }
+
+                    // Clone the repository and checkout to the specific tag
+                    deleteDir()
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger") ? "$tag" : "$last_commit" ]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [
+                            [$class: 'CleanBeforeCheckout'],
+                            [$class: 'ChangelogToBranch',options:[compareRemote: 'origin' ,compareTarget: 'develop' ]]
+                        ],
+                        userRemoteConfigs: [[
+                            credentialsId: "$PROJECT_SSH_KEY",
+                            url: "$PROJECT_REPO"
+                        ]]
+                    ])
+
+                    // get checkout_sha when manual_trigger
+                    if ("$object_kind" == 'manual_trigger' && "$checkout_sha" == '') {
+                        checkout_sha = sh(script: "git log --format=%H -n 1",  returnStdout: true).trim()
+                    }
+
+                    sh "mkdir -p build/reports"
+                }
+            }
+        }
+
+        stage('CDCD'){
+            when {
+                environment name: 'object_kind', value: 'tag' 
+            }
+
             steps {
                 echo '$project - $object_kind $tag'
             }
