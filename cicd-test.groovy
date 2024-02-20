@@ -65,7 +65,7 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                ls
+                echo 'Hello World'
             }
         }
     }
