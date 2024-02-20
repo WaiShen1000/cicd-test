@@ -58,7 +58,7 @@ pipeline {
                 silentResponse: false,
                 shouldNotFlattern: false,
                 regexpFilterText: '$object_kind $tag',
-                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+-alpha[.-]?\\d*$)'
+                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+$)'
         )
     }
     
