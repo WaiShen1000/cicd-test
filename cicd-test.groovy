@@ -43,7 +43,7 @@ pipeline {
                 silentResponse: false,
                 shouldNotFlattern: false,
                 regexpFilterText: '$object_kind $tag $pull_request $pull_request_head_branch',
-                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+$)'
+                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+\\s+$)|(\\s+(opened|synchronize)\\sdev)'
         )
     }
     // triggers {
