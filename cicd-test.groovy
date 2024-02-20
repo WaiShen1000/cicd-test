@@ -73,7 +73,7 @@ pipeline {
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [
                             [$class: 'CleanBeforeCheckout'],
-                            [$class: 'ChangelogToBranch',options:[compareRemote: 'origin' ,compareTarget: 'develop' ]]
+                            [$class: 'ChangelogToBranch',options:[compareRemote: 'origin' ,compareTarget: 'dev' ]]
                         ],
                         userRemoteConfigs: [[
                             credentialsId: "$PROJECT_SSH_KEY",
@@ -91,9 +91,12 @@ pipeline {
             }
         }
 
-        stage('CDCD'){
+        stage('CD'){
             when {
-                environment name: 'object_kind', value: 'tag' 
+                anyOf {
+                    environment name: 'object_kind', value: 'tag'
+                    environment name: 'object_kind', value: 'manual_trigger'
+                } 
             }
 
             steps {
