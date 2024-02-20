@@ -43,7 +43,7 @@ pipeline {
                 silentResponse: false,
                 shouldNotFlattern: false,
                 regexpFilterText: '$object_kind $tag $pr_action $pr_head_branch',
-                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+)|((opened|synchronize)\\sdev$)'
+                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+-alpha[.-]?\\d*)|((opened|synchronize)\\sdev$)'
         )
     }
     
