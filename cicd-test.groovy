@@ -70,11 +70,7 @@ pipeline {
                         extensions: [
                             [$class: 'CleanBeforeCheckout'],
                             [$class: 'ChangelogToBranch',options:[compareRemote: 'origin' ,compareTarget: 'develop' ]]
-                        ],
-                        userRemoteConfigs: [[
-                            credentialsId: "$PROJECT_SSH_KEY",
-                            url: "$PROJECT_REPO"
-                        ]]
+                        ]
                     ])
 
                     // get checkout_sha when manual_trigger
