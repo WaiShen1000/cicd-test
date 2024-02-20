@@ -22,24 +22,6 @@ pipeline {
         skipDefaultCheckout(true)
     }
 
-    // Define Environment Variables
-    environment {
-        SLACK_CHANNEL = "self-testing"
-        PROJECT_REPO = "git@github.com:varadise-ltd/asset-monitoring-service.git"
-        PROJECT_SSH_KEY = "GITHUB-SSH-KEY"
-
-        ECR_REPO_URL = "510775875854.dkr.ecr.ap-southeast-1.amazonaws.com/asset-monitoring-service"
-
-        GITLAB_TOKEN = credentials("GITLAB-API-Token-String")
-        HELM_CHART_REPO_BRANCH = "dev"
-        HELM_CHART_REPO = "git@gitlab.com:varadise-ltd/devops/helm-chart.git"
-        HELM_CHART_PATH = "varadise/service/product/asset-monitoring-service/values.yaml"
-
-        AWS_REGION = "ap-southeast-1"
-
-        LINTER = ".golangci.toml" // .eslintrc.js/.pylintrc/.golangci.toml
-    }
-
     // Define Trigger Parameters
     triggers {
         GenericTrigger(
@@ -65,7 +47,7 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo "$project - $object_kind $tag"
+                echo '$project - $object_kind $tag'
             }
         }
     }
