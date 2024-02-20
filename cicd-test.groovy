@@ -56,7 +56,7 @@ pipeline {
                     if ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger") {
                         if("$tag" ==~ /\d+\.\d+\.\d+-alpha[.-]?\d*/) {
                             echo 'Tag format is validated'
-                            echo ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger") ? "$tag" : "$last_commit"
+                            echo ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$last_commit")
                         } else {
                             error "Tag is not in a standard format."                                 
                         }
