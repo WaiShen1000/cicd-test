@@ -30,7 +30,7 @@ pipeline {
                     [key: 'object_kind', value: '\$.ref_type', defaultValue:'']
                     [key: 'tag', value:"\$.ref", defaultValue:''],
                     [key: 'pull_request', value: '\$.action', defaultValue:''],
-                    [key: 'pull_request_url', value: '\$.pull_request_url', defaultValue:''],
+                    [key: 'pull_request_url', value: '\$.pull_request.url', defaultValue:''],
                 ],
                 causeString: 'Triggered By Gitlab On $tag',
                 genericRequestVariables: [],
