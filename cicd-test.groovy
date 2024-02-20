@@ -21,7 +21,10 @@ pipeline {
         ansiColor('xterm')
         skipDefaultCheckout(true)
     }
-
+    environment {
+        PROJECT_REPO = "git@github.com:varadise-ltd/admin-hub.git"
+        PROJECT_SSH_KEY = "GITHUB-SSH-KEY"
+    }
     // Define Trigger Parameters
     triggers {
         GenericTrigger(
@@ -73,7 +76,8 @@ pipeline {
                             [$class: 'ChangelogToBranch',options:[compareRemote: 'origin' ,compareTarget: 'develop' ]]
                         ],
                         userRemoteConfigs: [[
-                            url: "git@github.com:WaiShen1000/cicd-test.git"
+                            credentialsId: "$PROJECT_SSH_KEY",
+                            url: "$PROJECT_REPO"
                         ]]
                     ])
 
