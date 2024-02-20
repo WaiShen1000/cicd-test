@@ -27,7 +27,7 @@ pipeline {
         GenericTrigger(
             genericVariables:[
                     [key: 'project', value:"\$.repository.name", defaultValue:''],
-                    [key: 'object_kind', value: '\$.ref_type', defaultValue:'']
+                    [key: 'object_kind', value: '\$.ref_type', defaultValue:''],
                     [key: 'tag', value:"\$.ref", defaultValue:''],
                     [key: 'pull_request', value: '\$.action', defaultValue:''],
                     [key: 'pull_request_url', value: '\$.pull_request.url', defaultValue:''],
