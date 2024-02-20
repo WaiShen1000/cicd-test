@@ -66,7 +66,7 @@ pipeline {
                     deleteDir()
                     checkout([
                         $class: 'GitSCM',
-                        branches: [[name: "$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$last_commit" ]],
+                        branches: [[(name: "$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$last_commit")]],
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [
                             [$class: 'CleanBeforeCheckout'],
