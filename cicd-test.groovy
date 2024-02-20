@@ -33,7 +33,7 @@ pipeline {
                     [key: 'pr_url', value: '\$.pr.url', defaultValue:''],
                     [key: 'pr_head_branch', value: '\$.pr.head.ref', defaultValue:''],
                 ],
-                causeString: '$object_kind' == 'tag' ? 'Triggered By Github On tag $tag' : 'Triggered By Github On Pull Request $pr_url',
+                causeString: '$object_kind' == 'tag' ? 'Triggered By Github On tag: $tag' : 'Triggered By Github On Pull Request: $pr_url',
                 genericRequestVariables: [],
                 genericHeaderVariables: [],
                 token: "abcdfed",
