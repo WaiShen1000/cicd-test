@@ -29,11 +29,11 @@ pipeline {
                     [key: 'project', value:"\$.repository.name", defaultValue:''],
                     [key: 'object_kind', value: '\$.ref_type', defaultValue:''],
                     [key: 'tag', value:"\$.ref", defaultValue:''],
-                    [key: 'pull_request', value: '\$.action', defaultValue:''],
-                    [key: 'pull_request_url', value: '\$.pull_request.url', defaultValue:''],
-                    [key: 'pull_request_head_branch', value: '\$.pull_request.head.ref', defaultValue:''],
+                    [key: 'pr_action', value: '\$.action', defaultValue:''],
+                    [key: 'pr_url', value: '\$.pr.url', defaultValue:''],
+                    [key: 'pr_head_branch', value: '\$.pr.head.ref', defaultValue:''],
                 ],
-                causeString: 'Triggered By Gitlab On $tag',
+                causeString: [[name: "$object_kind" == 'tag' ? 'Triggered By Gitlab On $tag' : "Triggered By Gitlab On pull request" ]]
                 genericRequestVariables: [],
                 genericHeaderVariables: [],
                 token: "abcdfed",
@@ -42,8 +42,8 @@ pipeline {
                 printPostContent: false,
                 silentResponse: false,
                 shouldNotFlattern: false,
-                regexpFilterText: '$object_kind $tag $pull_request $pull_request_head_branch',
-                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+\\s+$)|(\\s+(opened|synchronize)\\sdev)'
+                regexpFilterText: '$object_kind $tag $pr_action $pr_head_branch',
+                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+)|((opened|synchronize)\\sdev$)'
         )
     }
     // triggers {
