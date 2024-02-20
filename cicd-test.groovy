@@ -27,7 +27,7 @@ pipeline {
         GenericTrigger(
             genericVariables:[
                     [key: 'project', value:"\$.repository.name", defaultValue:''],
-                    [key: 'object_kind', value: '\$.ref_type', defaultValue:''],
+                    [key: 'object_kind', value: '\$.ref_type', defaultValue:'pull_request'],
                     [key: 'tag', value:"\$.ref", defaultValue:''],
                     [key: 'pr_action', value: '\$.action', defaultValue:''],
                     [key: 'pr_url', value: '\$.pull_request.html_url', defaultValue:''],
@@ -43,7 +43,7 @@ pipeline {
                 silentResponse: false,
                 shouldNotFlattern: false,
                 regexpFilterText: '$object_kind $tag $pr_action $pr_head_branch',
-                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+-alpha[.-]?\\d*)|((opened|synchronize)\\sdev$)'
+                regexpFilterExpression: '(^tag\\s\\d+\\.\\d+\\.\\d+-alpha[.-]?\\d*)|(pull_request\\s(opened|synchronize)\\sdev$)'
         )
     }
     
@@ -56,7 +56,7 @@ pipeline {
                     if ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger") {
                         if("$tag" ==~ /\d+\.\d+\.\d+-alpha[.-]?\d*/) {
                             echo 'Tag format is validated'
-                            echo ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$last_commit")
+                            echo ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$pr_head_branch")
                         } else {
                             error "Tag is not in a standard format."                                 
                         }
@@ -66,7 +66,7 @@ pipeline {
                     deleteDir()
                     checkout([
                         $class: 'GitSCM',
-                        branches: [[name: ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$last_commit")]],
+                        branches: [[name: ("$object_kind" == 'tag' || "$object_kind" == "manual_trigger" ? "$tag" : "$pr_head_branch")]],
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [
                             [$class: 'CleanBeforeCheckout'],
