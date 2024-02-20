@@ -71,7 +71,10 @@ pipeline {
                         extensions: [
                             [$class: 'CleanBeforeCheckout'],
                             [$class: 'ChangelogToBranch',options:[compareRemote: 'origin' ,compareTarget: 'develop' ]]
-                        ]
+                        ],
+                        userRemoteConfigs: [[
+                            url: "git@github.com:WaiShen1000/cicd-test.git"
+                        ]]
                     ])
 
                     // get checkout_sha when manual_trigger
